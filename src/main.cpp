@@ -29,19 +29,36 @@ float ypr[3];           // [yaw, pitch, roll]   Yaw/Pitch/Roll container and gra
 // float vertical_i = 1.2;
 // float vertical_d = 125*0.7;
 
-float vertical_p = 15*0.7;
+// float vertical_p = 15*0.7;
+// float vertical_i = 1;
+// float vertical_d = 130*0.7;
+
+float percent = 0.7;
+float vertical_p = 15.5*percent;
 float vertical_i = 1;
-float vertical_d = 130*0.7;
+float vertical_d = 110*percent;
 
 float vertical_integral = 0;
 float vertical_last_error = 0;
 uint32_t vertical_last_time = 0;
+
+// #define INTEGRAL_BUFFER_SIZE 350
+// uint16_t integral_index = 0;
+// float integral_buffer[INTEGRAL_BUFFER_SIZE] = {0};
 
 int vertical_control(float angle_error) {
     uint32_t current_time = millis();
     Serial.print("pass time: ");Serial.print(current_time - vertical_last_time);
     
     vertical_integral += angle_error;
+    // integral_buffer[integral_index] = angle_error;
+    // integral_index = (integral_index + 1) % INTEGRAL_BUFFER_SIZE;
+    // // average the integral over the buffer size
+    // vertical_integral = 0;
+    // for(int i = 0; i < INTEGRAL_BUFFER_SIZE; i++) {
+    //     vertical_integral += integral_buffer[i];
+    // }
+    // Serial.print("\tintegral: ");Serial.print(vertical_integral);
     if(vertical_integral > 180) vertical_integral = 180;
     if(vertical_integral < -180) vertical_integral = -180;
 
@@ -54,15 +71,17 @@ int vertical_control(float angle_error) {
     vertical_last_time = current_time;
     vertical_last_error = angle_error;
 
-    Serial.print(" p: ");Serial.print(p_term);
-    Serial.print(", d: ");Serial.print(d_term);
-    Serial.print(", angle_error: ");Serial.print(angle_error);
-    Serial.print(", l e: ");Serial.print(vertical_last_error);
-    Serial.print(", l t: ");Serial.print(vertical_last_time);
-    Serial.print(", c t: ");Serial.print(current_time);
-    Serial.print(", pwm: ");Serial.println(pwm);
-    // Serial.print(", pass time: ");Serial.println(current_time - vertical_last_time);    
+    // Serial.print(" p: ");Serial.print(p_term);
+    // Serial.print(", i: ");Serial.print(i_term);
+    // Serial.print(", d: ");Serial.print(d_term);
+    // Serial.print(", angle_error: ");Serial.print(angle_error);
+    // Serial.print(", l e: ");Serial.print(vertical_last_error);
+    // Serial.print(", l t: ");Serial.print(vertical_last_time);
+    // Serial.print(", c t: ");Serial.print(current_time);
+    // Serial.print(", pwm: ");Serial.println(pwm);
+    // // Serial.print(", pass time: ");Serial.println(current_time - vertical_last_time);    
 
+    Serial.println();
 
     return pwm;    
 }
