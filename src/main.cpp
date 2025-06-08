@@ -20,10 +20,18 @@ float ypr[3];           // [yaw, pitch, roll]   Yaw/Pitch/Roll container and gra
 
 
 
+// float vertical_p = 15*0.7;
+// float vertical_i = 1;
+// float vertical_d = 130*0.7;
+
+
+// float vertical_p = 14*0.7;
+// float vertical_i = 1.2;
+// float vertical_d = 125*0.7;
+
 float vertical_p = 15*0.7;
 float vertical_i = 1;
 float vertical_d = 130*0.7;
-
 
 float vertical_integral = 0;
 float vertical_last_error = 0;
@@ -34,8 +42,8 @@ int vertical_control(float angle_error) {
     Serial.print("pass time: ");Serial.print(current_time - vertical_last_time);
     
     vertical_integral += angle_error;
-    if(vertical_integral > 100) vertical_integral = 100;
-    if(vertical_integral < -100) vertical_integral = -100;
+    if(vertical_integral > 180) vertical_integral = 180;
+    if(vertical_integral < -180) vertical_integral = -180;
 
     
     float p_term = vertical_p * angle_error;
